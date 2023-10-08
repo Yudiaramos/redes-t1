@@ -11,15 +11,15 @@ def find_available_port(host, port, max_attempts=10):
             server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             server_socket.bind((host, port))
             server_socket.close()
-            return port  # Port is available
+            return port  # A porta está disponível
         except socket.error as e:
             if attempt < max_attempts - 1:
-                # Address is in use, try the next port
+                # O endereço está em uso, tentando a próxima porta
                 port += 1
             else:
-                raise Exception("Unable to find an available port after multiple attempts.")
+                raise Exception("Não foi possível encontrar uma porta disponível após várias tentativas.")
 
-# Find an available port
+# Encontrando uma porta disponivel
 port = find_available_port(host, port)
 
 # Lista para armazenar os clientes conectados

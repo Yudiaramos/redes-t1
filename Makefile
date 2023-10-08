@@ -26,5 +26,5 @@ cliente:
 
 # Alvo para limpar arquivos temporários
 clean:
-	# Adicione comandos para limpeza, se necessário
+	#
 

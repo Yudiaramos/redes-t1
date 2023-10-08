@@ -3,7 +3,7 @@ import threading
 
 # Configurações do cliente
 HOST = '127.0.0.1'  # Endereço IP do servidor
-PORT = 12355      # Porta do servidor
+PORT = 12354      # Porta do servidor
 
 # Função para ler mensagens do servidor
 def receive_messages(client_socket):
@@ -25,6 +25,8 @@ def receive_messages(client_socket):
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((HOST, PORT))
 print(f'Conectado ao servidor em {HOST}:{PORT}')
+
+print(f'\nVocê está conectado ao servidor, aqui você pode realizar os seguintes comandos:\n\n/criar "Nome da sala"       .Para criar uma sala.\n/listar                     .Para ver a lista de salas em que pode se conectar.\n/conectar "Nome da sala"    .Para se conectar a uma sala.\n\nAo conectar em uma sala você poderá mandar mensagens aos usuários.\n')
 
 # Inicia uma thread para receber mensagens do servidor
 receive_thread = threading.Thread(target=receive_messages, args=(client,))
