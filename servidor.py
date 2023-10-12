@@ -3,7 +3,7 @@ import threading
 
 # Configurações do servidor
 host = '127.0.0.1'  # Endereço IP do servidor
-port = 12354       # Porta a ser usada pelo servidor
+port = 12370      # Porta a ser usada pelo servidor
 
 def find_available_port(host, port, max_attempts=10):
     for attempt in range(max_attempts):

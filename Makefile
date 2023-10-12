@@ -1,30 +1,36 @@
-# Makefile para compilar e executar servidor.py e cliente.py
+# Makefile para compilar e executar servidor e clientes
 
-# Nome dos arquivos Python
-SERVER_FILE = servidor.py
-CLIENT_FILE = cliente.py
+# Comandos para compilação
+CC = gcc
+CFLAGS = -Wall
 
-# Comandos para executar os programas Python
-PYTHON = python3
+# Nomes dos executáveis
+SERVER = servidor
+CLIENT1 = cliente1
+CLIENT2 = cliente2
 
-# Comandos para compilar e executar o servidor
-SERVER_RUN = $(PYTHON) $(SERVER_FILE)
+all: $(SERVER) $(CLIENT1) $(CLIENT2)
 
-# Comandos para compilar e executar o cliente
-CLIENT_RUN = $(PYTHON) $(CLIENT_FILE)
+$(SERVER): servidor.c
+	$(CC) $(CFLAGS) -o $@ $< -lpthread
 
-# Alvo padrão: executar o servidor e o cliente
-all: servidor cliente
+$(CLIENT1): cliente.c
+	$(CC) $(CFLAGS) -o $@ $<
 
-# Alvo para executar o servidor
-servidor:
-	$(SERVER_RUN)
+$(CLIENT2): cliente.c
+	$(CC) $(CFLAGS) -o $@ $<
 
-# Alvo para executar o cliente
-cliente:
-	$(CLIENT_RUN)
+run-server: $(SERVER)
+	./$(SERVER)
 
-# Alvo para limpar arquivos temporários
+run-client1: $(CLIENT1)
+	./$(CLIENT1)
+
+run-client2: $(CLIENT2)
+	./$(CLIENT2)
+
+run: run-server run-client1 run-client2
+
 clean:
-	#
+	rm -f $(SERVER) $(CLIENT1) $(CLIENT2)
 

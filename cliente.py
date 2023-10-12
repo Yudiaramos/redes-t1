@@ -1,9 +1,9 @@
 import socket
 import threading
+import time
 
-# Configurações do cliente
-HOST = '127.0.0.1'  # Endereço IP do servidor
-PORT = 12354      # Porta do servidor
+# Variáveis globais para rastrear as salas disponíveis
+available_rooms = set()
 
 # Função para ler mensagens do servidor
 def receive_messages(client_socket):
@@ -15,11 +15,29 @@ def receive_messages(client_socket):
                 print('Conexão com o servidor perdida.')
                 client_socket.close()
                 break
-            print(data.decode('utf-8'))
+            message = data.decode('utf-8')
+            
+            # Verifica se uma nova sala foi criada
+            if "uma nova sala foi criada!" in message:
+                print('Digite "/listar" para ver as novas salas.')
+            else:
+                print(message)
         except Exception as e:
             print(f'Erro na comunicação com o servidor: {e}')
             client_socket.close()
             break
+
+# Função para verificar novas salas a cada 10 segundos
+def check_new_rooms(client):
+    while True:
+        time.sleep(60)
+        client.send('/listar'.encode('utf-8'))
+
+# Endereço IP padrão
+HOST = '127.0.0.1'
+
+# Solicitar apenas a porta do servidor
+PORT = int(input('Digite a porta do servidor: '))
 
 # Configuração do cliente
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -32,6 +50,10 @@ print(f'\nVocê está conectado ao servidor, aqui você pode realizar os seguint
 receive_thread = threading.Thread(target=receive_messages, args=(client,))
 receive_thread.start()
 
+# Inicia uma thread para verificar novas salas
+check_new_rooms_thread = threading.Thread(target=check_new_rooms, args=(client,))
+check_new_rooms_thread.start()
+
 # Loop principal para enviar mensagens
 while True:
     try:
@@ -43,6 +65,7 @@ while True:
         elif mensagem.startswith('/conectar'):
             client.send(mensagem.encode('utf-8'))
         else:
+            # Apenas envie a mensagem
             client.send(mensagem.encode('utf-8'))
     except KeyboardInterrupt:
         print('Cliente encerrado.')
